@@ -43,12 +43,12 @@ from src.preprocessing import TextPreprocessor
 # ══════════════════════════════════════════════════════════════════════════
 
 # Paths to raw data
-COMPLAINTS_CSV = RAW_DIR / "archive (1)" / "rows.csv"
+COMPLAINTS_CSV = RAW_DIR / "SF 311 Cases" / "311-cases.csv"
 FAKE_NEWS_CSV = RAW_DIR / "archive (2)" / "Fake.csv"
 TRUE_NEWS_CSV = RAW_DIR / "archive (2)" / "True.csv"
 
 # Sampling limits (to keep training fast on CPU)
-MAX_COMPLAINTS = 30000      # Sample from 383K rows with narratives
+MAX_COMPLAINTS = 200000      # Sample from rows
 MAX_NEWS_ARTICLES = 20000   # Sample from ~44K articles (10K fake + 10K true)
 
 # Output paths
@@ -81,33 +81,38 @@ def step1_preprocess_complaints() -> pd.DataFrame:
     logger.info(f"Loading raw complaints from: {COMPLAINTS_CSV}")
     df = pd.read_csv(
         COMPLAINTS_CSV,
-        usecols=["Consumer complaint narrative", "Product"],
+        usecols=["Category", "Request Type", "Request Details", "Neighborhood"],
         low_memory=False
     )
     logger.info(f"Total rows: {len(df)}")
 
-    # Drop rows without narrative text
-    df = df.dropna(subset=["Consumer complaint narrative"])
-    logger.info(f"Rows with narrative: {len(df)}")
+    # Drop empty rows
+    df = df.dropna(subset=["Category", "Request Details"])
+    logger.info(f"Rows with text: {len(df)}")
 
-    # Sample to keep training manageable
+    # Sample to keep training manageable and prevent RAM crash
     if len(df) > MAX_COMPLAINTS:
         df = df.sample(n=MAX_COMPLAINTS, random_state=42)
         logger.info(f"Sampled to {MAX_COMPLAINTS} rows")
 
-    # Rename columns
+    # Combine columns to create a descriptive text for NLP training
+    df["text"] = df["Category"].astype(str) + " - " + df["Request Type"].astype(str) + " - " + df["Request Details"].astype(str) + " at " + df["Neighborhood"].fillna("Unknown").astype(str)
+    
+    # Rename columns to match pipeline expectations
     df = df.rename(columns={
-        "Consumer complaint narrative": "text",
-        "Product": "category"
+        "Category": "category"
     })
 
     # Preprocess
     preprocessor = TextPreprocessor(min_length=20, max_length=512)
     df["clean_text"] = df["text"].astype(str).apply(preprocessor.clean_text)
 
-    # Drop short/empty
+    # Drop short/empty strings
     df = df[df["clean_text"].str.len() >= 20].copy()
-    df = df.drop_duplicates(subset=["clean_text"])
+    
+    # We NO LONGER drop duplicates! 
+    # In the 311 dataset, many complaints share the same Descriptor. 
+    # Keeping the volume ensures the model learns the real-world probability distribution!
 
     # Detect language
     logger.info("Detecting languages (this may take a few minutes)...")
