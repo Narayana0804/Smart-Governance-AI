@@ -5,7 +5,7 @@
 A multi-module civic intelligence system featuring:
 - **Complaint Intelligence Engine** - Auto-categorization, urgency detection, trend analysis
 - **Misinformation Detector** - Semantic similarity-based fake news detection
-- **Multilingual NLP** - Hindi, Telugu, Tamil, English support
+- **Multilingual NLP** - Hindi, Telugu, Tamil, English support.
 
 ### Tech Stack
 | Component | Technology |
