@@ -1,0 +1,29 @@
+# Virtual Environments
+venv/
+.env/
+env/
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Data & Models (Do not commit heavy files)
+data/raw/*
+data/processed/*
+data/embeddings/*
+data/vector_db/*
+models/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/embeddings/.gitkeep
+!data/vector_db/.gitkeep
+!models/.gitkeep
+
+# Environment variables
+.env
+
+# Streamlit
+.streamlit/

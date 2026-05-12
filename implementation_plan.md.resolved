@@ -1,0 +1,83 @@
+@# 🏛️ Smart Governance AI - Implementation Plan
+
+## Project: AI-Powered Smart Governance + Regional Language Misinformation Detection Platform
+
+---
+
+## 📋 Overview
+
+A multi-module civic intelligence system with:
+1. **Civic Complaint Intelligence Engine** - Categorization, urgency detection, trend analysis
+2. **Public Sentiment & Infrastructure Monitoring** - Social media mining, topic modeling
+3. **Regional Language Misinformation Detector** - Semantic similarity, paraphrase detection
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Language | Python 3.10+ |
+| NLP Models | XLM-RoBERTa, IndicBERT, MuRIL |
+| Embeddings | Sentence Transformers (all-MiniLM-L6-v2) |
+| Topic Modeling | BERTopic + UMAP + HDBSCAN |
+| Vector Search | FAISS |
+| Backend | FastAPI + Uvicorn |
+| Dashboard | Streamlit |
+| Deployment | Docker + docker-compose |
+
+## 📦 Phases
+
+### Phase 1 - Project Setup ✅ (Building Now)
+- Create folder structure
+- Setup requirements.txt
+- Config files
+
+### Phase 2 - Data Collection ⏳ (Need datasets from user)
+- Civic complaints dataset (NYC 311 / Indian Civic Issues)
+- Fake news dataset (ISOT / LIAR)
+- Social media tweets dataset
+
+### Phase 3 - Data Preprocessing
+- Text cleaning (URLs, emojis, special chars, duplicates)
+- Multilingual normalization (Hindi, Telugu, Tamil, English)
+- HuggingFace tokenization
+
+### Phase 4 - Embedding Generation
+- Sentence Transformer embeddings (384-dim with MiniLM)
+- Save as .npy files
+
+### Phase 5 - Complaint Clustering (BERTopic)
+- UMAP → HDBSCAN → BERTopic pipeline
+- Auto-discover complaint categories
+
+### Phase 6 - Urgency Detection Model
+- Fine-tune XLM-RoBERTa for 4-class classification
+- Classes: LOW, MEDIUM, HIGH, CRITICAL
+
+### Phase 7 - Misinformation Detection
+- Semantic similarity with FAISS
+- Paraphrase detection pipeline
+
+### Phase 8 - Vector Database (FAISS)
+- Index complaint & news embeddings
+- Enable semantic search
+
+### Phase 9 - FastAPI Backend
+- `/predict-topic` - Complaint category
+- `/predict-urgency` - Urgency level
+- `/similar-news` - Fake news similarity
+- `/analyze-text` - Full pipeline analysis
+
+### Phase 10 - Streamlit Dashboard
+- Complaint upload & analysis
+- Real-time predictions
+- Topic distribution charts
+- Fake news detection alerts
+- Regional heatmaps
+
+### Phase 11-14 - Model Saving, Deployment, Testing, Documentation
+
+## 🎯 Current Status
+
+> [!IMPORTANT]
+> Building Phase 1 (Project Setup) + Phase 3 (Preprocessing) + Phase 9 (FastAPI) + Phase 10 (Dashboard) now.
+> **Datasets needed from user for Phase 2.**
